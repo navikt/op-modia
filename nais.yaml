@@ -1,5 +1,5 @@
 name: "op-modia"
-image: "repo.adeo.no:5443/syfo/op-modia"
+image: "repo.adeo.no:5443/integrasjon/op-modia"
 replicas:
   min: 1
   max: 2

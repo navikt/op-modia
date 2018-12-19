@@ -5,10 +5,9 @@ pipeline {
 
     environment {
         APPLICATION_NAME = 'op-modia'
-        DISABLE_SLACK_MESSAGES = true
+        FASIT_ENVIRONMENT = 'q1'
         ZONE = 'fss'
-        DOCKER_SLUG='syfo'
-        FASIT_ENVIRONMENT='q1'
+        DOCKER_SLUG = 'integrasjon'
     }
 
     stages {
