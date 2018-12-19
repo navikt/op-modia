@@ -30,3 +30,5 @@ fasitResources:
   used:
     - alias: srvop-modia
       resourceType: Credential
+    - alias: kafka_bootstrap_servers
+      resourceType: BaseUrl
