@@ -68,7 +68,6 @@ suspend fun blockingApplicationLogic(applicationState: ApplicationState, opConsu
         opConsumer.poll(Duration.ofMillis(0)).forEach {
             val receivedOppfolginsplan: ReceivedOppfolginsplan = objectMapper.readValue(it.value())
             val logValues = arrayOf(
-                    StructuredArguments.keyValue("smId", receivedOppfolginsplan.navLogId),
                     StructuredArguments.keyValue("orgNr", receivedOppfolginsplan.senderOrgId),
                     StructuredArguments.keyValue("navkontor", receivedOppfolginsplan.navLogId)
             )
