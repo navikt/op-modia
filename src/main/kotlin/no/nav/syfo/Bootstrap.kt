@@ -69,7 +69,7 @@ suspend fun blockingApplicationLogic(applicationState: ApplicationState, opConsu
             val receivedOppfolginsplan: ReceivedOppfolginsplan = objectMapper.readValue(it.value())
             val logValues = arrayOf(
                     StructuredArguments.keyValue("smId", receivedOppfolginsplan.navLogId),
-                    StructuredArguments.keyValue("orgNr", receivedOppfolginsplan.senderOrgId ),
+                    StructuredArguments.keyValue("orgNr", receivedOppfolginsplan.senderOrgId),
                     StructuredArguments.keyValue("navkontor", receivedOppfolginsplan.navLogId)
             )
             val logKeys = logValues.joinToString(prefix = "(", postfix = ")", separator = ",") { "{}" }
