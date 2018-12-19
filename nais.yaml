@@ -27,7 +27,6 @@ resources:
     cpu: 50m
     memory: 128Mi
 fasitResources:
-  exposed:
-used:
-  - alias: srvop-modia
-    resourceType: Credential
+  used:
+    - alias: srvop-modia
+      resourceType: Credential
