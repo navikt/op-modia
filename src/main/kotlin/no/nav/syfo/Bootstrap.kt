@@ -1,5 +1,10 @@
 package no.nav.syfo
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.ktor.application.Application
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -8,7 +13,9 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import net.logstash.logback.argument.StructuredArguments
 import no.nav.syfo.api.registerNaisApi
+import no.nav.syfo.model.ReceivedOppfolginsplan
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,6 +25,11 @@ import java.util.concurrent.TimeUnit
 
 data class ApplicationState(var running: Boolean = true, var initialized: Boolean = false)
 val log: Logger = LoggerFactory.getLogger("no.nav.syfo")
+val objectMapper: ObjectMapper = ObjectMapper().apply {
+    registerKotlinModule()
+    registerModule(JavaTimeModule())
+    configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+}
 
 fun main(args: Array<String>) = runBlocking(Executors.newFixedThreadPool(2).asCoroutineDispatcher()) {
     val env = Environment()
@@ -54,8 +66,14 @@ fun main(args: Array<String>) = runBlocking(Executors.newFixedThreadPool(2).asCo
 suspend fun blockingApplicationLogic(applicationState: ApplicationState, opConsumer: KafkaConsumer<String, String>) {
     while (applicationState.running) {
         opConsumer.poll(Duration.ofMillis(0)).forEach {
-
-            log.info("Received a Altinn oppfølgingsplan")
+            val receivedOppfolginsplan: ReceivedOppfolginsplan = objectMapper.readValue(it.value())
+            val logValues = arrayOf(
+                    StructuredArguments.keyValue("smId", receivedOppfolginsplan.navLogId),
+                    StructuredArguments.keyValue("orgNr", receivedOppfolginsplan.senderOrgId ),
+                    StructuredArguments.keyValue("navkontor", receivedOppfolginsplan.navLogId)
+            )
+            val logKeys = logValues.joinToString(prefix = "(", postfix = ")", separator = ",") { "{}" }
+            log.info("Received a Altinn oppfølgingsplan $logKeys", *logValues)
         }
         delay(100)
     }
