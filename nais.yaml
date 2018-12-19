@@ -29,5 +29,5 @@ resources:
 fasitResources:
   exposed:
 used:
-  - alias: op-modia
+  - alias: srvop-modia
     resourceType: Credential
