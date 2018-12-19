@@ -9,8 +9,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.nav.syfo.api.registerNaisApi
+import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.Duration
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -28,7 +30,11 @@ fun main(args: Array<String>) = runBlocking(Executors.newFixedThreadPool(2).asCo
     try {
         val listeners = (1..env.applicationThreads).map {
             launch {
-                blockingApplicationLogic(applicationState)
+                val consumerProperties = readConsumerConfig(env)
+
+                val opConsumer = KafkaConsumer<String, String>(consumerProperties)
+                opConsumer.subscribe(listOf(env.kafkaIncommingTopicOppfolginsplan))
+                blockingApplicationLogic(applicationState, opConsumer)
             }
         }.toList()
 
@@ -45,8 +51,12 @@ fun main(args: Array<String>) = runBlocking(Executors.newFixedThreadPool(2).asCo
     }
 }
 
-suspend fun blockingApplicationLogic(applicationState: ApplicationState) {
+suspend fun blockingApplicationLogic(applicationState: ApplicationState, opConsumer: KafkaConsumer<String, String>) {
     while (applicationState.running) {
+        opConsumer.poll(Duration.ofMillis(0)).forEach {
+
+            log.info("Received a Altinn oppfølgingsplan")
+        }
         delay(100)
     }
 }
