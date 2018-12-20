@@ -12,6 +12,7 @@ buildscript {
     ext.oppfolgingsplan = "1.0-SNAPSHOT"
     ext.jaxb_version = '2.3.0.1'
     ext.jaxb_api_version = '2.1'
+    ext.javax_activation_version = '1.1.1'
 }
 
 plugins {
@@ -63,6 +64,7 @@ dependencies {
 
     implementation "org.glassfish.jaxb:jaxb-runtime:$jaxb_version"
     implementation "javax.xml.bind:jaxb-api:$jaxb_api_version"
+    implementation "javax.activation:activation:$javax_activation_version"
     
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jackson_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
