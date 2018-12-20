@@ -11,6 +11,7 @@ buildscript {
     ext.jackson_version = "2.9.7"
     ext.oppfolgingsplan = "1.0-SNAPSHOT"
     ext.jaxb_version = '2.3.0.1'
+    ext.jaxb_api_version = '2.1'
 }
 
 plugins {
@@ -61,6 +62,7 @@ dependencies {
     implementation "org.apache.kafka:kafka_2.12:$kafka_version"
 
     implementation "org.glassfish.jaxb:jaxb-runtime:$jaxb_version"
+    implementation "javax.xml.bind:jaxb-api:$jaxb_api_version"
     
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jackson_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
