@@ -9,7 +9,7 @@ buildscript {
     ext.logstash_encoder_version = '5.1'
     ext.kotlin_version = '1.3.10'
     ext.jackson_version = "2.9.7"
-    ext.oppfolgingsplan = "1.0-SNAPSHOT"
+    ext.oppfolgingsplan = "1.0.0-SNAPSHOT"
     ext.jaxb_version = '2.3.0.1'
     ext.jaxb_api_version = '2.1'
     ext.javax_activation_version = '1.1.1'
